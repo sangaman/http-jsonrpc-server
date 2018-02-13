@@ -1,5 +1,5 @@
 {
-  "name": "jsonrpc-server",
+  "name": "http-jsonrpc-server",
   "version": "1.0.0-alpha.1",
   "description": "A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server",
   "main": "lib/jsonrpc-server.js",
@@ -8,21 +8,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sangaman/node-jsonrpc-server.git"
+    "url": "git+https://github.com/sangaman/http-jsonrpc-server.git"
   },
   "keywords": [
     "jsonrpc",
     "json-rpc",
     "http",
     "server",
-    "jsonrpc-server"
+    "http-jsonrpc-server",
+    "json",
+    "rpc",
+    "api"
   ],
   "author": "Daniel McNally",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sangaman/node-jsonrpc-server/issues"
+    "url": "https://github.com/sangaman/http-jsonrpc-server/issues"
   },
-  "homepage": "https://github.com/sangaman/node-jsonrpc-server#readme",
+  "homepage": "https://github.com/sangaman/http-jsonrpc-server#readme",
   "devDependencies": {
     "eslint": "^4.17.0",
     "eslint-config-airbnb-base": "^12.1.0",

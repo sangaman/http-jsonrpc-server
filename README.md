@@ -1,4 +1,4 @@
-# jsonrpc-server
+# http-jsonrpc-server
 
 A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server.
 
@@ -6,16 +6,16 @@ Complies with the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) and the [
 
 ## Install
 
-To install jsonrpc-server in the current directory, run:
+To install http-jsonrpc-server in the current directory, run:
 
 ```bash
-npm install jsonrpc-server --save
+npm install http-jsonrpc-server --save
 ```
 
 ## Usage
 
 ```javascript
-const jsonrpc = require('jsonrpc-server');
+const jsonrpc = require('http-jsonrpc-server');
 
 function sum(arr) {
   let total = 0;

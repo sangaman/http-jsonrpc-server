@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const request = require('supertest');
-const jsonrpc = require('../lib/jsonrpc-server');
+const jsonrpc = require('../lib/http-jsonrpc-server');
 
 const { server } = jsonrpc;
 

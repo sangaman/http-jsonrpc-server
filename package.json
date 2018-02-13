@@ -2,7 +2,7 @@
   "name": "http-jsonrpc-server",
   "version": "1.0.0-alpha.1",
   "description": "A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server",
-  "main": "lib/jsonrpc-server.js",
+  "main": "lib/http-jsonrpc-server.js",
   "scripts": {
     "test": "mocha --reporter spec --exit"
   },

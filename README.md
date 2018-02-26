@@ -41,12 +41,29 @@ rpcServer.listen(9090).then(() = > {
 }
 ```
 
-You can also specify a path to listen on:
+### Specifying a Path
 
 ```javascript
 const rpcServer = new RpcServer('/api');
 rpcServer.listen(9090).then(() = > {
   console.log('server is listening at http://127.0.0.1:9090/api');
+}
+```
+
+### Callbacks
+
+You can provide functions to be called each time a method is called or throws an error.
+
+```javascript
+
+rpcServer.onRequest = (request) => {
+  console.log(JSON.stringify(request));
+  // sample output: {"jsonrpc":"2.0","id":1,"method":"sum","params":[1,2,3]}
+
+};
+
+rpcServer.onError = (err, id) => {
+  console.error('oops, request ' + id + ' threw an error: ' + err);
 }
 ```
 

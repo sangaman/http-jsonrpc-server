@@ -2,9 +2,10 @@
 
 const assert = require('assert');
 const request = require('supertest');
-const jsonrpc = require('../lib/http-jsonrpc-server');
+const RpcServer = require('../lib/http-jsonrpc-server');
 
-const { server } = jsonrpc;
+const rpcServer = new RpcServer();
+const server = rpcServer.getServer();
 
 function sum(arr) {
   let total = 0;
@@ -24,8 +25,8 @@ async function wait(params) {
 
 describe('jsonrpc-server', () => {
   before(async () => {
-    jsonrpc.setMethod('sum', sum);
-    jsonrpc.setMethod('wait', wait);
+    rpcServer.setMethod('sum', sum);
+    rpcServer.setMethod('wait', wait);
   });
 
   it('should 404 an unknown path', () => request(server)
@@ -50,7 +51,7 @@ describe('jsonrpc-server', () => {
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, jsonrpc.PARSE_ERROR);
+      assert.strictEqual(response.body.error.code, RpcServer.PARSE_ERROR);
     }));
 
   it('should error invalid jsonrpc', () => request(server)
@@ -63,7 +64,7 @@ describe('jsonrpc-server', () => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
       assert.strictEqual(response.body.id, 1);
-      assert.strictEqual(response.body.error.code, jsonrpc.INVALID_REQUEST);
+      assert.strictEqual(response.body.error.code, RpcServer.INVALID_REQUEST);
     }));
 
   it('should error invalid id', () => request(server)
@@ -75,7 +76,7 @@ describe('jsonrpc-server', () => {
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, jsonrpc.INVALID_REQUEST);
+      assert.strictEqual(response.body.error.code, RpcServer.INVALID_REQUEST);
     }));
 
   it('should error invalid method', () => request(server)
@@ -88,7 +89,7 @@ describe('jsonrpc-server', () => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
       assert.strictEqual(response.body.id, 1);
-      assert.strictEqual(response.body.error.code, jsonrpc.METHOD_NOT_FOUND);
+      assert.strictEqual(response.body.error.code, RpcServer.METHOD_NOT_FOUND);
     }));
 
   it('should error invalid params', () => request(server)
@@ -101,7 +102,7 @@ describe('jsonrpc-server', () => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
       assert.strictEqual(response.body.id, 1);
-      assert.strictEqual(response.body.error.code, jsonrpc.INVALID_PARAMS);
+      assert.strictEqual(response.body.error.code, RpcServer.INVALID_PARAMS);
     }));
 
   it('should return expected result for valid request', () => request(server)

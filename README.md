@@ -15,7 +15,7 @@ npm install http-jsonrpc-server --save
 ## Usage
 
 ```javascript
-const jsonrpc = require('http-jsonrpc-server');
+const RpcServer = require('http-jsonrpc-server');
 
 function sum(arr) {
   let total = 0;
@@ -33,15 +33,21 @@ async function wait(params) {
   });
 }
 
-jsonrpc.setMethod('sum', sum);
-jsonrpc.setMethod('wait', wait);
-jsonrpc.listen(9090); // listening on http://127.0.0.1:9090/
+const rpcServer = new RpcServer();
+rpcServer.setMethod('sum', sum);
+rpcServer.setMethod('wait', wait);
+rpcServer.listen(9090).then(() = > {
+  console.log('server is listening at http://127.0.0.1:9090/');
+}
 ```
 
 You can also specify a path to listen on:
 
 ```javascript
-jsonrpc.listen(9090, '/api') // listening on http://127.0.0.1:9090/api
+const rpcServer = new RpcServer('/api');
+rpcServer.listen(9090).then(() = > {
+  console.log('server is listening at http://127.0.0.1:9090/api');
+}
 ```
 
 ## Example Requests

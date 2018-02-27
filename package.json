@@ -4,7 +4,7 @@
   "description": "A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server",
   "main": "lib/http-jsonrpc-server.js",
   "scripts": {
-    "test": "mocha --reporter spec --exit"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",

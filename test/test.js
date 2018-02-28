@@ -55,7 +55,7 @@ describe('constructor', () => {
     }));
   });
 
-  it('should error path with not starting with "/"', () => {
+  it('should error path not starting with "/"', () => {
     assert.throws(() => new RpcServer({
       path: 'testpath',
     }));
@@ -111,7 +111,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('asdlkfjasld')
     .expect(200)
-    .expect('Content-Type', /json/)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -124,6 +124,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"1.0","id":1,"method":"sum"}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -137,6 +138,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":["ids should not be arrays"],"method":"sum"}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -149,6 +151,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":2,"method":123}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -162,6 +165,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":3,"method":"sum","params":"params should not be a string"}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -175,6 +179,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":12,"method":"sum","params":["a","b","c"]}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.result, undefined);
@@ -188,6 +193,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":4,"method":"sum","params":[1,2,3]}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.error, undefined);
@@ -201,6 +207,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","method":"sum","params":[1,2,3]}')
     .expect(204)
+    .expect('Content-Length', '0')
     .then((response) => {
       assert.strictEqual(response.body, '');
     }));
@@ -211,6 +218,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('[{"jsonrpc":"2.0","id":5,"method":"sum","params":[1,2,3]},{"jsonrpc":"2.0","id":6,"method":"sum","params":[4,5,6]}]')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.ok(Array.isArray(response.body));
       assert.strictEqual(response.body.length, 2);
@@ -239,6 +247,7 @@ describe('handling requests', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":7,"method":"wait","params":{"ms":50}}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.error, undefined);
@@ -261,6 +270,7 @@ describe('custom path', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":8,"method":"sum","params":[2,4,6]}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(response.body.jsonrpc, '2.0');
       assert.strictEqual(response.body.error, undefined);
@@ -293,6 +303,7 @@ describe('onRequest & onError callbacks', () => {
     .set('Content-Type', 'application/json')
     .send(reqStr)
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(reqStr, lastReqStr);
       assert.strictEqual(response.body.jsonrpc, '2.0');
@@ -307,6 +318,7 @@ describe('onRequest & onError callbacks', () => {
     .set('Content-Type', 'application/json')
     .send('{"jsonrpc":"2.0","id":10,"method":"sum","params":["a","b","c"]}')
     .expect(200)
+    .expect('Content-Type', 'application/json')
     .then((response) => {
       assert.strictEqual(lastErrId, 10);
       assert.strictEqual(response.body.jsonrpc, '2.0');
@@ -328,6 +340,7 @@ describe('setMethod', () => {
       .set('Content-Type', 'application/json')
       .send('{"jsonrpc":"2.0","id":11,"method":"sum","params":[3,6,9]}')
       .expect(200)
+      .expect('Content-Type', 'application/json')
       .then((response) => {
         assert.strictEqual(response.body.jsonrpc, '2.0');
         assert.strictEqual(response.body.error, undefined);

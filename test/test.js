@@ -95,6 +95,22 @@ async function testRequest(server, body, path) {
     .expect('Content-Type', 'application/json');
 }
 
+function assertError(body, expectedCode, id) {
+  assert.strictEqual(body.jsonrpc, '2.0');
+  assert.strictEqual(body.result, undefined);
+  assert.strictEqual(body.error.code, expectedCode);
+  if (id) {
+    assert.strictEqual(body.id, id);
+  }
+}
+
+function assertResult(body, expectedResult, id) {
+  assert.strictEqual(body.jsonrpc, '2.0');
+  assert.strictEqual(body.error, undefined);
+  assert.strictEqual(body.id, id);
+  assert.strictEqual(body.result, expectedResult);
+}
+
 describe('handling requests', () => {
   const rpcServer = new RpcServer({
     methods: {
@@ -117,56 +133,37 @@ describe('handling requests', () => {
 
   it('should error invalid json', () => testRequest(rpcServer.server, 'asdlkfjasld')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, RpcServer.PARSE_ERROR);
+      assertError(response.body, RpcServer.PARSE_ERROR);
     }));
 
   it('should error invalid jsonrpc', () => testRequest(rpcServer.server, '{"jsonrpc":"1.0","id":1,"method":"sum"}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.id, 1);
-      assert.strictEqual(response.body.error.code, RpcServer.INVALID_REQUEST);
+      assertError(response.body, RpcServer.INVALID_REQUEST, 1);
     }));
 
   it('should error invalid id', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":["ids should not be arrays"],"method":"sum"}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, RpcServer.INVALID_REQUEST);
+      assertError(response.body, RpcServer.INVALID_REQUEST);
     }));
 
   it('should error invalid method', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":2,"method":123}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.id, 2);
-      assert.strictEqual(response.body.error.code, RpcServer.METHOD_NOT_FOUND);
+      assertError(response.body, RpcServer.METHOD_NOT_FOUND, 2);
     }));
 
   it('should error invalid params', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":3,"method":"sum","params":"params should not be a string"}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.id, 3);
-      assert.strictEqual(response.body.error.code, RpcServer.INVALID_PARAMS);
+      assertError(response.body, RpcServer.INVALID_PARAMS, 3);
     }));
 
   it('should error on invalid input', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":12,"method":"sum","params":["a","b","c"]}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, RpcServer.SERVER_ERROR);
-      assert.strictEqual(response.body.id, 12);
+      assertError(response.body, RpcServer.SERVER_ERROR, 12);
     }));
 
   it('should return expected result for valid request', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":4,"method":"sum","params":[1,2,3]}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.error, undefined);
-      assert.strictEqual(response.body.id, 4);
-      assert.strictEqual(response.body.result, 6);
+      assertResult(response.body, 6, 4);
     }));
 
   it('should return nothing for notifications', () => request(rpcServer.server)
@@ -205,10 +202,7 @@ describe('handling requests', () => {
 
   it('should call an async method', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":7,"method":"wait","params":{"ms":50}}')
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.error, undefined);
-      assert.strictEqual(response.body.id, 7);
-      assert.ok(response.body.result);
+      assertResult(response.body, true, 7);
     }));
 });
 
@@ -222,10 +216,7 @@ describe('custom path', () => {
 
   it('should use a custom path', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":8,"method":"sum","params":[2,4,6]}', testPath)
     .then((response) => {
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.error, undefined);
-      assert.strictEqual(response.body.id, 8);
-      assert.strictEqual(response.body.result, 12);
+      assertResult(response.body, 12, 8);
     }));
 });
 
@@ -250,19 +241,13 @@ describe('onRequest & onError callbacks', () => {
   it('should trigger the onRequest callback', () => testRequest(rpcServer.server, reqStr)
     .then((response) => {
       assert.strictEqual(reqStr, lastReqStr);
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.error, undefined);
-      assert.strictEqual(response.body.id, 9);
-      assert.strictEqual(response.body.result, 6);
+      assertResult(response.body, 6, 9);
     }));
 
   it('should trigger the onError callback', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":10,"method":"sum","params":["a","b","c"]}')
     .then((response) => {
       assert.strictEqual(lastErrId, 10);
-      assert.strictEqual(response.body.jsonrpc, '2.0');
-      assert.strictEqual(response.body.result, undefined);
-      assert.strictEqual(response.body.error.code, RpcServer.SERVER_ERROR);
-      assert.strictEqual(response.body.id, 10);
+      assertError(response.body, RpcServer.SERVER_ERROR, 10);
     }));
 });
 
@@ -274,10 +259,7 @@ describe('setMethod', () => {
     rpcServer.setMethod('sum', sum);
     testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":11,"method":"sum","params":[3,6,9]}')
       .then((response) => {
-        assert.strictEqual(response.body.jsonrpc, '2.0');
-        assert.strictEqual(response.body.error, undefined);
-        assert.strictEqual(response.body.id, 11);
-        assert.strictEqual(response.body.result, 18);
+        assertResult(response.body, 18, 11);
       });
   });
 });

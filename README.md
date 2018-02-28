@@ -1,8 +1,13 @@
 # http-jsonrpc-server
 
+[![Build Status](https://travis-ci.org/sangaman/http-jsonrpc-server.svg?branch=master)](https://travis-ci.org/sangaman/http-jsonrpc-server/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)
+[![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
+[![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
+
 A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server.
 
-This package complies with the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) and [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specifications. It has no dependencies.
+This package complies with the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) and [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specifications.
 
 ## Install
 

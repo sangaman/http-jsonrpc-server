@@ -8,9 +8,7 @@ const RpcServer = require('../lib/http-jsonrpc-server');
 function sum(arr) {
   let total = 0;
   for (let n = 0; n < arr.length; n += 1) {
-    if (typeof arr[n] !== 'number') {
-      throw new Error('parameters must be an array of numbers');
-    }
+    assert(typeof arr[n] === 'number', 'parameters must be an array of numbers');
     total += arr[n];
   }
   return total;
@@ -31,19 +29,21 @@ describe('constructor', () => {
 
   it('should return an RpcServer object for valid options', () => {
     const onRequest = () => 'request';
-    const onError = () => 'error';
+    const onRequestError = () => 'request error';
+    const onServerError = () => 'server error';
     const methods = {
       sum,
       wait,
     };
     rpcServer = new RpcServer({
-      onError,
       onRequest,
+      onRequestError,
+      onServerError,
       methods,
       path: testPath,
     });
-    assert.ok(rpcServer instanceof RpcServer);
-    assert.strictEqual(rpcServer.onError, onError);
+    assert(rpcServer instanceof RpcServer);
+    assert.strictEqual(rpcServer.onRequestError, onRequestError);
     assert.strictEqual(rpcServer.onRequest, onRequest);
     assert.strictEqual(rpcServer.methods, methods);
     assert.strictEqual(rpcServer.path, testPath);
@@ -78,9 +78,15 @@ describe('constructor', () => {
     }));
   });
 
-  it('should error onError that is not a function', () => {
+  it('should error onRequestError that is not a function', () => {
     assert.throws(() => new RpcServer({
-      onError: 'not a function',
+      onRequestError: 'not a function',
+    }));
+  });
+
+  it('should error onServerError that is not a function', () => {
+    assert.throws(() => new RpcServer({
+      onServerError: 'not a function',
     }));
   });
 });
@@ -179,7 +185,7 @@ describe('handling requests', () => {
 
   it('should return batched results for valid requests', () => testRequest(rpcServer.server, '[{"jsonrpc":"2.0","id":5,"method":"sum","params":[1,2,3]},{"jsonrpc":"2.0","id":6,"method":"sum","params":[4,5,6]}]')
     .then((response) => {
-      assert.ok(Array.isArray(response.body));
+      assert(Array.isArray(response.body));
       assert.strictEqual(response.body.length, 2);
       for (let n = 0; n < response.body.length; n += 1) {
         assert.strictEqual(response.body[n].jsonrpc, '2.0');
@@ -220,14 +226,14 @@ describe('custom path', () => {
     }));
 });
 
-describe('onRequest & onError callbacks', () => {
+describe('onRequest & onRequestError callbacks', () => {
   const reqStr = '{"jsonrpc":"2.0","id":9,"method":"sum","params":[1,2,3]}';
   let lastReqStr;
   let lastErrId;
   const onRequest = (req) => {
     lastReqStr = JSON.stringify(req);
   };
-  const onError = (err, id) => {
+  const onRequestError = (err, id) => {
     lastErrId = id;
   };
   const rpcServer = new RpcServer({
@@ -235,7 +241,7 @@ describe('onRequest & onError callbacks', () => {
       sum,
     },
     onRequest,
-    onError,
+    onRequestError,
   });
 
   it('should trigger the onRequest callback', () => testRequest(rpcServer.server, reqStr)
@@ -244,7 +250,7 @@ describe('onRequest & onError callbacks', () => {
       assertResult(response.body, 6, 9);
     }));
 
-  it('should trigger the onError callback', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":10,"method":"sum","params":["a","b","c"]}')
+  it('should trigger the onRequestError callback', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":10,"method":"sum","params":["a","b","c"]}')
     .then((response) => {
       assert.strictEqual(lastErrId, 10);
       assertError(response.body, RpcServer.SERVER_ERROR, 10);
@@ -287,8 +293,8 @@ describe('listening and closing', () => {
 
   it('should listen on an open port then stop listening', async () => {
     await listenOnOpenPort(rpcServer);
-    assert.ok(rpcServer.server.listening);
+    assert(rpcServer.server.listening);
     await rpcServer.close();
-    assert.ok(!rpcServer.server.listening);
+    assert(!rpcServer.server.listening);
   });
 });

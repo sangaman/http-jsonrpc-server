@@ -5,6 +5,20 @@
 [![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
 [![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
 
+- [Install](#install)
+- [Usage](#usage)
+  - [Specifying a Path](#specifying-a-path)
+  - [Optional Callbacks](#optional-callbacks)
+  - [Adding/Updating Methods](#adding-updating-methods)
+  - [Closing the Server](#closing-the-server)
+  - [Native HTTP Server](#native-http-server)
+  - [Exposed Constants](#exposed-constants)
+- [API Documentation](#api-documentation)
+- [Sample Requests](#sample-requests)
+  - [Sum](#sum)
+  - [Sum (Batched)](#sum--batched-)
+  - [Wait](#wait)
+
 A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server.
 
 This package complies with the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) and [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specifications.

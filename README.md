@@ -64,18 +64,21 @@ rpcServer.listen(9090).then(() => {
 }
 ```
 
-### Callbacks
+### Optional Callbacks
 
-You can provide functions to be called each time a method is called or throws an error.
+`onServerError` will be called if the server emits an [error](https://nodejs.org/api/net.html#net_event_error). `onRequest` and `onRequestError` will be called each time a method is called or throws an error.
 
 ```javascript
 const rpcServer = new RpcServer({
+  onServerError: (err) => {
+    console.error('the server threw an error: ' + err)
+  },
   onRequest: (request) => {
     console.log(JSON.stringify(request));
     // sample output: {"jsonrpc":"2.0","id":1,"method":"sum","params":[1,2,3]}
   },
-  onError = (err, id) => {
-    console.error('oops, request ' + id + ' threw an error: ' + err);
+  onRequestError = (err, id) => {
+    console.error('request ' + id + ' threw an error: ' + err);
   },
 });
 ```
@@ -116,6 +119,70 @@ console.log(rpcServer.INVALID_PARAMS); // -32602
 console.log(rpcServer.SERVER_ERROR); // -32000
 console.log(rpcServer.SERVER_ERROR_MAX); // -32099
 ```
+
+## API Documentation
+
+<a name="RpcServer"></a>
+
+## RpcServer
+Class representing a HTTP JSON-RPC server
+
+**Kind**: global class
+
+* [RpcServer](#RpcServer)
+    * [new RpcServer(options)](#new_RpcServer_new)
+    * [.setMethod(name, method)](#RpcServer+setMethod)
+    * [.listen(port)](#RpcServer+listen) ⇒ <code>Promise</code>
+    * [.close()](#RpcServer+close) ⇒ <code>Promise</code>
+
+<a name="new_RpcServer_new"></a>
+
+### new RpcServer(options)
+Create an RpcServer
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> | Optional parameters for the server. |
+| options.methods | <code>Object</code> | A map of method names to functions. Method functions are passed one parameter which will either be an Object or a string array. |
+| options.path | <code>Object</code> | The path for the server. |
+| options.onRequestError | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request. |
+| options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id. |
+| options.onServerError | <code>function</code> | Callback for server errors, it is passed an [Error](https://nodejs.org/api/errors.html#errors_class_error). |
+
+<a name="RpcServer+setMethod"></a>
+
+### rpcServer.setMethod(name, method)
+Set a method
+
+**Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | The name of the method |
+| method | <code>function</code> | The function to be called for this method. Method functions are passed one parameter which will either be an Object or a string array. |
+
+<a name="RpcServer+listen"></a>
+
+### rpcServer.listen(port) ⇒ <code>Promise</code>
+Begin listening on a given port
+
+**Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
+**Returns**: <code>Promise</code> - A promise that resolves to true once the server is listening. On error or
+invalid port number the promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
+
+| Param | Type | Description |
+| --- | --- | --- |
+| port | <code>number</code> | The port number to listen on |
+
+<a name="RpcServer+close"></a>
+
+### rpcServer.close() ⇒ <code>Promise</code>
+Stop listening on all ports
+
+**Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
+**Returns**: <code>Promise</code> - A promise that resolves to true once the server stops listening. On error
+the promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
 
 ## Sample Requests
 

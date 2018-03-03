@@ -226,15 +226,19 @@ describe('custom path', () => {
     }));
 });
 
-describe('onRequest & onRequestError callbacks', () => {
+describe('request callbacks', () => {
   const reqStr = '{"jsonrpc":"2.0","id":9,"method":"sum","params":[1,2,3]}';
   let lastReqStr;
   let lastErrId;
+  let lastResId;
   const onRequest = (req) => {
     lastReqStr = JSON.stringify(req);
   };
   const onRequestError = (err, id) => {
     lastErrId = id;
+  };
+  const onResult = (result, id) => {
+    lastResId = id;
   };
   const rpcServer = new RpcServer({
     methods: {
@@ -242,6 +246,7 @@ describe('onRequest & onRequestError callbacks', () => {
     },
     onRequest,
     onRequestError,
+    onResult,
   });
 
   it('should trigger the onRequest callback', () => testRequest(rpcServer.server, reqStr)
@@ -254,6 +259,12 @@ describe('onRequest & onRequestError callbacks', () => {
     .then((response) => {
       assert.strictEqual(lastErrId, 10);
       assertError(response.body, RpcServer.SERVER_ERROR, 10);
+    }));
+
+  it('should trigger the onResult callback', () => testRequest(rpcServer.server, '{"jsonrpc":"2.0","id":13,"method":"sum","params":[5,5,5]}')
+    .then((response) => {
+      assert.strictEqual(lastResId, 13);
+      assertResult(response.body, 15, 13);
     }));
 });
 

@@ -1,7 +1,8 @@
 # http-jsonrpc-server
 
 [![Build Status](https://travis-ci.org/sangaman/http-jsonrpc-server.svg?branch=master)](https://travis-ci.org/sangaman/http-jsonrpc-server/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)[![bitHound Code](https://www.bithound.io/github/sangaman/http-jsonrpc-server/badges/code.svg)](https://www.bithound.io/github/sangaman/http-jsonrpc-server)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)
+[![bitHound Code](https://www.bithound.io/github/sangaman/http-jsonrpc-server/badges/code.svg)](https://www.bithound.io/github/sangaman/http-jsonrpc-server)
 [![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
 [![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
 

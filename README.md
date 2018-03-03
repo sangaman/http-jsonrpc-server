@@ -1,7 +1,7 @@
 # http-jsonrpc-server
 
 [![Build Status](https://travis-ci.org/sangaman/http-jsonrpc-server.svg?branch=master)](https://travis-ci.org/sangaman/http-jsonrpc-server/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)[![bitHound Code](https://www.bithound.io/github/sangaman/http-jsonrpc-server/badges/code.svg)](https://www.bithound.io/github/sangaman/http-jsonrpc-server)
 [![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
 [![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
 
@@ -80,19 +80,22 @@ rpcServer.listen(9090).then(() => {
 
 ### Optional Callbacks
 
-`onServerError` will be called if the server emits an [error](https://nodejs.org/api/net.html#net_event_error). `onRequest` and `onRequestError` will be called each time a method is called or throws an error.
+`onServerError` will be called if the server emits an [error](https://nodejs.org/api/net.html#net_event_error). `onRequest`, and `onRequestError`, and `onResult` will be called each time a method is called, throws an error, or returns a result respectively.
 
 ```javascript
 const rpcServer = new RpcServer({
-  onServerError: (err) => {
-    console.error('the server threw an error: ' + err)
-  },
   onRequest: (request) => {
     console.log(JSON.stringify(request));
     // sample output: {"jsonrpc":"2.0","id":1,"method":"sum","params":[1,2,3]}
   },
   onRequestError = (err, id) => {
     console.error('request ' + id + ' threw an error: ' + err);
+  },
+  onResult = (result, id) => {
+    console.log(result); // sample output: 6
+  },
+  onServerError: (err) => {
+    console.error('the server threw an error: ' + err)
   },
 });
 ```
@@ -162,6 +165,7 @@ Create an RpcServer
 | options.path | <code>string</code> | The path for the server. |
 | options.onRequest | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request. |
 | options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id. |
+| options.onResult | <code>function</code> | Callback for when requests are successfully returned a result.
 | options.onServerError | <code>function</code> | Callback for server errors, it is passed an [Error](https://nodejs.org/api/errors.html#errors_class_error). |
 
 <a name="RpcServer+setMethod"></a>

@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/sangaman/http-jsonrpc-server#readme",
   "devDependencies": {
-    "eslint": "^4.18.1",
+    "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "mocha": "^5.0.1",

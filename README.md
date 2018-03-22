@@ -63,7 +63,7 @@ const rpcServer = new RpcServer({
 });
 rpcServer.setMethod('sum', sum);
 rpcServer.setMethod('wait', wait);
-rpcServer.listen(9090).then(() => {
+rpcServer.listen(9090, '127.0.0.1').then(() => {
   console.log('server is listening at http://127.0.0.1:9090/');
 }
 ```
@@ -74,7 +74,7 @@ rpcServer.listen(9090).then(() => {
 const rpcServer = new RpcServer({
   path: '/api'
 });
-rpcServer.listen(9090).then(() => {
+rpcServer.listen(9090, '127.0.0.1').then(() => {
   console.log('server is listening at http://127.0.0.1:9090/api');
 }
 ```
@@ -150,7 +150,7 @@ Class representing a HTTP JSON-RPC server
 * [RpcServer](#RpcServer)
     * [new RpcServer(options)](#new_RpcServer_new)
     * [.setMethod(name, method)](#RpcServer+setMethod)
-    * [.listen(port)](#RpcServer+listen) ⇒ <code>Promise</code>
+    * [.listen(port, host)](#RpcServer+listen) ⇒ <code>Promise</code>
     * [.close()](#RpcServer+close) ⇒ <code>Promise</code>
 
 <a name="new_RpcServer_new"></a>
@@ -183,8 +183,8 @@ Set a method
 
 <a name="RpcServer+listen"></a>
 
-### rpcServer.listen(port) ⇒ <code>Promise</code>
-Begin listening on a given port
+### rpcServer.listen(port, host) ⇒ <code>Promise</code>
+Begin listening on a given port and host
 
 **Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
 **Returns**: <code>Promise</code> - A promise that resolves to true once the server is listening. On error or
@@ -193,6 +193,7 @@ invalid port number the promise will be rejected with an [Error](https://nodejs.
 | Param | Type | Description |
 | --- | --- | --- |
 | port | <code>number</code> | The port number to listen on |
+| host | <code>string</code> | The host name or ip address to listen on |
 
 <a name="RpcServer+close"></a>
 

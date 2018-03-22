@@ -286,7 +286,7 @@ async function listenOnOpenPort(rpcServer) {
   let port = 1024;
   while (port < 65536) {
     try {
-      await rpcServer.listen(port);
+      await rpcServer.listen(port, '127.0.0.1');
       return port;
     } finally {
       port += 1;

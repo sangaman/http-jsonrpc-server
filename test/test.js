@@ -367,4 +367,15 @@ describe('listening and closing', () => {
     }
     assert(!rpcServer.server.listening);
   });
+
+  it('should not leave listeners on closed servers', async () => {
+    // treat erroring to console as a failure
+    // this will fail on the "(node:7268) MaxListenersExceededWarning" error
+    console.error = assert.fail;
+
+    for (let n = 0; n < 11; n += 1) {
+      await rpcServer.listen();
+      await rpcServer.close();
+    }
+  });
 });

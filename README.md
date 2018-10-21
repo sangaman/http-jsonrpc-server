@@ -6,19 +6,25 @@
 [![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
 [![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
 
-- [Install](#install)
-- [Usage](#usage)
-  - [Specifying a Path](#specifying-a-path)
-  - [Optional Callbacks](#optional-callbacks)
-  - [Adding/Updating Methods](#adding-updating-methods)
-  - [Closing the Server](#closing-the-server)
-  - [Native HTTP Server](#native-http-server)
-  - [Exposed Constants](#exposed-constants)
-- [API Documentation](#api-documentation)
-- [Sample Requests](#sample-requests)
-  - [Sum](#sum)
-  - [Sum (Batched)](#sum--batched-)
-  - [Wait](#wait)
+- [http-jsonrpc-server](#http-jsonrpc-server)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Specifying a Path](#specifying-a-path)
+    - [Optional Callbacks](#optional-callbacks)
+    - [Adding/Updating Methods](#addingupdating-methods)
+    - [Closing the Server](#closing-the-server)
+    - [Native HTTP Server](#native-http-server)
+    - [Exposed Constants](#exposed-constants)
+  - [API Documentation](#api-documentation)
+  - [RpcServer](#rpcserver)
+    - [new RpcServer(options)](#new-rpcserveroptions)
+    - [rpcServer.setMethod(name, method)](#rpcserversetmethodname-method)
+    - [rpcServer.listen(port, host) ⇒ <code>Promise</code>](#rpcserverlistenport-host--codepromisecode)
+    - [rpcServer.close() ⇒ <code>Promise</code>](#rpcserverclose--codepromisecode)
+  - [Sample Requests](#sample-requests)
+    - [Sum](#sum)
+    - [Sum (Batched)](#sum-batched)
+    - [Wait](#wait)
 
 A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server.
 
@@ -163,6 +169,7 @@ Create an RpcServer
 | --- | --- | --- |
 | options | <code>Object</code> | Optional parameters for the server. |
 | options.methods | <code>Object</code> | A map of method names to functions. Method functions are passed one parameter which will either be an Object or a string array. |
+| options.context |  | Context to be used as `this` for method functions. |
 | options.path | <code>string</code> | The path for the server. |
 | options.onRequest | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request. |
 | options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id. |

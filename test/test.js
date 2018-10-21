@@ -327,20 +327,6 @@ describe('setMethod', () => {
   });
 });
 
-async function listenOnOpenPort(rpcServer) {
-  // find an available port
-  let port = 1024;
-  while (port < 65536) {
-    try {
-      await rpcServer.listen(port, '127.0.0.1');
-      return port;
-    } finally {
-      port += 1;
-    }
-  }
-  throw new Error('could not find open port');
-}
-
 describe('listening and closing', () => {
   let rpcServer;
 
@@ -349,9 +335,19 @@ describe('listening and closing', () => {
   });
 
   it('should listen on an open port then stop listening', async () => {
-    await listenOnOpenPort(rpcServer);
+    await rpcServer.listen();
     assert(rpcServer.server.listening);
     await rpcServer.close();
+    assert(!rpcServer.server.listening);
+  });
+
+  it('should fail listening on an invalid port', async () => {
+    try {
+      await rpcServer.listen(66666);
+      assert.fail();
+    } catch (err) {
+      assert(err instanceof RangeError);
+    }
     assert(!rpcServer.server.listening);
   });
 });

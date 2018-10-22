@@ -1,3 +1,5 @@
+import http from 'http';
+
 /** Class representing a HTTP JSON-RPC server */
 declare class RpcServer {
   constructor(options?: {
@@ -38,6 +40,8 @@ declare class RpcServer {
    * @param method The function to be called for this method
    */
   setMethod(name: string, method: (params?: object) => any): void;
+
+  server: http.Server;
 
   static INVALID_PARAMS: number;
 

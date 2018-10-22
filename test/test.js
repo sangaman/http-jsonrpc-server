@@ -23,6 +23,10 @@ async function wait(params) {
   });
 }
 
+function getContext() {
+  return this;
+}
+
 const testPath = '/testpath';
 
 describe('constructor', () => {
@@ -123,7 +127,9 @@ describe('handling requests', () => {
     methods: {
       sum,
       wait,
+      getContext,
     },
+    context: 'test context',
   });
 
   it('should 404 an unknown path', () => request(rpcServer.server)
@@ -250,6 +256,13 @@ describe('handling requests', () => {
     body: '{"jsonrpc":"2.0","id":7,"method":"wait","params":{"ms":50}}',
   }).then((response) => {
     assertResult(response.body, true, 7);
+  }));
+
+  it('should use optional context as this', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":16,"method":"getContext"}',
+  }).then((response) => {
+    assertResult(response.body, 'test context', 16);
   }));
 });
 

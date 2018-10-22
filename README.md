@@ -169,6 +169,7 @@ Create an RpcServer
 | --- | --- | --- |
 | options | <code>Object</code> | Optional parameters for the server. |
 | options.methods | <code>Object</code> | A map of method names to functions. Method functions are passed one parameter which will either be an Object or a string array. |
+| options.context |  | Context to be used as `this` for method functions. |
 | options.path | <code>string</code> | The path for the server. |
 | options.onRequest | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request. |
 | options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id. |

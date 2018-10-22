@@ -4,8 +4,9 @@
   "description": "A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server",
   "main": "lib/http-jsonrpc-server.js",
   "scripts": {
-    "test": "mocha --reporter spec",
-    "lint": "./node_modules/.bin/eslint . ./**/*.js"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "./node_modules/.bin/eslint . ./**/*.js",
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -28,8 +29,10 @@
   },
   "homepage": "https://github.com/sangaman/http-jsonrpc-server#readme",
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "supertest": "^3.3.0"
   },
   "engines": {

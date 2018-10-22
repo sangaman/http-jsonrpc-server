@@ -370,7 +370,8 @@ describe('listening and closing', () => {
 
   it('should not leave listeners on closed servers', async () => {
     // treat erroring to console as a failure
-    // this will fail on the "(node:7268) MaxListenersExceededWarning" error
+    // this will fail on the "(node:7268) MaxListenersExceededWarning" warning if it is logged
+    // eslint-disable-next-line no-console
     console.error = assert.fail;
 
     for (let n = 0; n < 11; n += 1) {

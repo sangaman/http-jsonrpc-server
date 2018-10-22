@@ -4,6 +4,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const RpcServer = require('../lib/http-jsonrpc-server');
+const consts = require('../lib/consts');
 
 function sum(arr) {
   let total = 0;
@@ -140,7 +141,10 @@ describe('handling requests', () => {
   it('should 400 requests that do not accept application/json', () => request(rpcServer.server)
     .post('/')
     .set('Content-Type', 'application/json')
-    .expect(400));
+    .expect(400)
+    .then((response) => {
+      assert.strictEqual(response.body.error, consts.INVALID_ACCEPT_HEADER_MSG);
+    }));
 
   it('should error invalid json', () => testRequest({ server: rpcServer.server, body: 'asdlkfjasld' })
     .then((response) => {

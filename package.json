@@ -29,6 +29,11 @@
     "url": "https://github.com/sangaman/http-jsonrpc-server/issues"
   },
   "homepage": "https://github.com/sangaman/http-jsonrpc-server#readme",
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
   "devDependencies": {
     "coveralls": "^3.0.2",
     "eslint": "^5.7.0",

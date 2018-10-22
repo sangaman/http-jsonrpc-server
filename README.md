@@ -19,8 +19,8 @@
   - [RpcServer](#rpcserver)
     - [new RpcServer(options)](#new-rpcserveroptions)
     - [rpcServer.setMethod(name, method)](#rpcserversetmethodname-method)
-    - [rpcServer.listen(port, host) ⇒ <code>Promise</code>](#rpcserverlistenport-host--codepromisecode)
-    - [rpcServer.close() ⇒ <code>Promise</code>](#rpcserverclose--codepromisecode)
+    - [rpcServer.listen(port, host) ⇒ <code>Promise.&lt;number&gt;</code>](#rpcserverlistenport-host--codepromiseltnumbergtcode)
+    - [rpcServer.close() ⇒ <code>Promise.&lt;void&gt;</code>](#rpcserverclose--codepromiseltvoidgtcode)
   - [Sample Requests](#sample-requests)
     - [Sum](#sum)
     - [Sum (Batched)](#sum-batched)
@@ -156,30 +156,28 @@ Class representing a HTTP JSON-RPC server
 * [RpcServer](#RpcServer)
     * [new RpcServer(options)](#new_RpcServer_new)
     * [.setMethod(name, method)](#RpcServer+setMethod)
-    * [.listen(port, host)](#RpcServer+listen) ⇒ <code>Promise</code>
-    * [.close()](#RpcServer+close) ⇒ <code>Promise</code>
+    * [.listen(port, host)](#RpcServer+listen) ⇒ <code>Promise.&lt;number&gt;</code>
+    * [.close()](#RpcServer+close) ⇒ <code>Promise.&lt;void&gt;</code>
 
 <a name="new_RpcServer_new"></a>
 
 ### new RpcServer(options)
-Create an RpcServer
-
 
 | Param | Type | Description |
 | --- | --- | --- |
-| options | <code>Object</code> | Optional parameters for the server. |
-| options.methods | <code>Object</code> | A map of method names to functions. Method functions are passed one parameter which will either be an Object or a string array. |
+| options | <code>Object</code> | Optional parameters for the server |
+| options.methods | <code>Object</code> | A map of method names to functions. Method functions are passed one parameter which will either be an Object or a string array |
 | options.context |  | Context to be used as `this` for method functions. |
-| options.path | <code>string</code> | The path for the server. |
-| options.onRequest | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request. |
-| options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id. |
-| options.onResult | <code>function</code> | Callback for when requests are successfully returned a result.
-| options.onServerError | <code>function</code> | Callback for server errors, it is passed an [Error](https://nodejs.org/api/errors.html#errors_class_error). |
+| options.path | <code>string</code> | The path for the server |
+| options.onRequest | <code>function</code> | Callback for when requests are received, it is passed an Object representing the request |
+| options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id |
+| options.onResult | <code>function</code> | Callback for when requests are successfully returned a result. It is passed the response object and request id |
+| options.onServerError | <code>function</code> | Callback for server errors, it is passed an [Error](https://nodejs.org/api/errors.html#errors_class_error) |
 
 <a name="RpcServer+setMethod"></a>
 
 ### rpcServer.setMethod(name, method)
-Set a method
+Sets a method.
 
 **Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
 
@@ -190,26 +188,26 @@ Set a method
 
 <a name="RpcServer+listen"></a>
 
-### rpcServer.listen(port, host) ⇒ <code>Promise</code>
-Begin listening on a given port and host
+### rpcServer.listen(port, host) ⇒ <code>Promise.&lt;number&gt;</code>
+Begins listening on a given port and host.
 
 **Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
-**Returns**: <code>Promise</code> - A promise that resolves to true once the server is listening. On error or
-invalid port number the promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
+**Returns**: <code>Promise.&lt;number&gt;</code> - A promise that resolves to the assigned port once the server is
+listening. On error the promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
 
 | Param | Type | Description |
 | --- | --- | --- |
-| port | <code>number</code> | The port number to listen on |
-| host | <code>string</code> | The host name or ip address to listen on |
+| port | <code>number</code> | The port number to listen on - an arbitrary available port is used if no port is specified |
+| host | <code>string</code> | The host name or ip address to listen on - the unspecified IP address (`0.0.0.0` or `(::)`) is used if no host is specified |
 
 <a name="RpcServer+close"></a>
 
-### rpcServer.close() ⇒ <code>Promise</code>
-Stop listening on all ports
+### rpcServer.close() ⇒ <code>Promise.&lt;void&gt;</code>
+Stops listening on all ports.
 
 **Kind**: instance method of [<code>RpcServer</code>](#RpcServer)
-**Returns**: <code>Promise</code> - A promise that resolves to true once the server stops listening. On error
-the promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
+**Returns**: <code>Promise.&lt;void&gt;</code> - A promise that resolves once the server stops listening. On error the
+promise will be rejected with an [Error](https://nodejs.org/api/errors.html#errors_class_error).
 
 ## Sample Requests
 

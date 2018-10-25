@@ -17,6 +17,18 @@ declare class RpcServer {
     onResult: (response: any, id: string) => void,
     /** Callback for server errors. */
     onServerError: (err: Error) => void,
+    /**
+     * Username for authentication. If provided, Basic Authentication will be enabled and required
+     * for all requests.
+     */
+    username: string,
+    /** Password for authentication, ignored unless a username is also specified. */
+    password: string,
+    /**
+     * Realm for authentication, ignored unless a username is also specified, defaults to
+     * `Restricted` if not specified.
+     */
+    realm: string,
   });
 
   /** 

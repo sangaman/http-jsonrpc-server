@@ -13,6 +13,7 @@
     - [Optional Callbacks](#optional-callbacks)
     - [Adding/Updating Methods](#addingupdating-methods)
     - [Closing the Server](#closing-the-server)
+    - [Basic Authentication](#basic-authentication)
     - [Native HTTP Server](#native-http-server)
     - [Exposed Constants](#exposed-constants)
   - [API Documentation](#api-documentation)
@@ -109,7 +110,7 @@ const rpcServer = new RpcServer({
 
 ### Adding/Updating Methods
 
-You can register new methods or updates existing ones after the server has been created.
+You can register new methods or update existing ones after the server has been created.
 
 ```javascript
 rpcServer.setMethod('sum', sum);
@@ -121,6 +122,18 @@ rpcServer.setMethod('sum', sum);
 rpcServer.close().then(() => {
   console.log('server stopped listening');
 }
+```
+
+### Basic Authentication
+
+You can optionally enable [Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) by specifying credentials when creating the server. Any requests will then require an `Authorization` header with `[username]:[password]` encoded in Base64. Note that TLS is not currently supported, therefore all traffic is unencrypted and these credentials can be stolen by anyone relaying or listening to requests. This authentication alone should not be considered secure over public networks.
+
+```javascript
+const rpcServer = new RpcServer({
+  username: 'johndoe',
+  password: 'wasspord', // ignored unless username is specified
+  realm: 'rpc' // realm defaults to "Restricted" if not specified
+});
 ```
 
 ### Native HTTP Server
@@ -173,6 +186,9 @@ Class representing a HTTP JSON-RPC server
 | options.onRequestError | <code>function</code> | Callback for when requested methods throw errors, it is passed an error and request id |
 | options.onResult | <code>function</code> | Callback for when requests are successfully returned a result. It is passed the response object and request id |
 | options.onServerError | <code>function</code> | Callback for server errors, it is passed an [Error](https://nodejs.org/api/errors.html#errors_class_error) |
+| options.username | <code>string</code> | Username for authentication. If provided, Basic Authentication will be enabled and required for all requests. |
+| options.password | <code>string</code> | Password for authentication, ignored unless a username is also specified. |
+| options.realm | <code>string</code> | Realm for authentication, ignored unless a username is also specified, defaults to `Restricted` if not specified. |
 
 <a name="RpcServer+setMethod"></a>
 

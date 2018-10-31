@@ -6,6 +6,8 @@ const request = require('supertest');
 const RpcServer = require('../lib/http-jsonrpc-server');
 const consts = require('../lib/consts');
 
+const realm = 'testrealm';
+
 function sum(arr) {
   let total = 0;
   for (let n = 0; n < arr.length; n += 1) {
@@ -96,14 +98,22 @@ describe('constructor', () => {
   });
 });
 
-async function testRequest(options) {
-  return request(options.server)
+function testRequest(options) {
+  const req = request(options.server)
     .post(options.path || '/')
     .set('Accept', options.accept || 'application/json')
-    .set('Content-Type', options.contentType || 'application/json')
-    .send(options.body)
-    .expect(200)
-    .expect('Content-Type', 'application/json');
+    .set('Content-Type', options.contentType || 'application/json');
+
+  if (options.authorization) {
+    req.set('Authorization', options.authorization);
+  }
+
+  const ret = req.send(options.body)
+    .expect(options.statusCode || 200);
+
+  return (options.statusCode && options.statusCode === 401)
+    ? ret.expect('WWW-Authenticate', `Basic realm="${realm}"`)
+    : ret.expect('Content-Type', 'application/json');
 }
 
 function assertError(body, expectedCode, id) {
@@ -298,9 +308,7 @@ describe('request callbacks', () => {
     lastResId = id;
   };
   const rpcServer = new RpcServer({
-    methods: {
-      sum,
-    },
+    methods: { sum },
     onRequest,
     onRequestError,
     onResult,
@@ -379,4 +387,42 @@ describe('listening and closing', () => {
       await rpcServer.close();
     }
   });
+});
+
+function getAuthorization(username, password) {
+  const authorization = Buffer.from(`${username}:${password}`).toString('base64');
+  return `Basic ${authorization}`;
+}
+
+describe('authentication', () => {
+  const reqStr = '{"jsonrpc":"2.0","id":17,"method":"sum","params":[1,2,3]}';
+  const username = 'test';
+  const password = 'wasspord';
+  const rpcServer = new RpcServer({
+    username,
+    password,
+    realm,
+    methods: { sum },
+  });
+
+  it('should reject a request without authorization', () => testRequest({
+    server: rpcServer.server,
+    body: reqStr,
+    statusCode: 401,
+  }));
+
+  it('should reject a request with invalid credentials', () => testRequest({
+    server: rpcServer.server,
+    body: reqStr,
+    statusCode: 401,
+    authorization: getAuthorization('wrong', 'credentials'),
+  }));
+
+  it('should accept a request with proper credentials', () => testRequest({
+    server: rpcServer.server,
+    body: reqStr,
+    authorization: getAuthorization(username, password),
+  }).then((response) => {
+    assertResult(response.body, 6, 17);
+  }));
 });

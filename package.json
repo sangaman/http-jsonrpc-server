@@ -1,6 +1,6 @@
 {
   "name": "http-jsonrpc-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple and lightweight library for creating a JSON-RPC 2.0 compliant HTTP server",
   "main": "lib/http-jsonrpc-server.js",
   "types": "lib/http-jsonrpc-server.d.ts",

@@ -96,10 +96,10 @@ const rpcServer = new RpcServer({
     console.log(JSON.stringify(request));
     // sample output: {"jsonrpc":"2.0","id":1,"method":"sum","params":[1,2,3]}
   },
-  onRequestError = (err, id) => {
+  onRequestError: (err, id) => {
     console.error('request ' + id + ' threw an error: ' + err);
   },
-  onResult = (result, id) => {
+  onResult: (result, id) => {
     console.log(result); // sample output: 6
   },
   onServerError: (err) => {

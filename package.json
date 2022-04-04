@@ -6,7 +6,7 @@
   "types": "lib/http-jsonrpc-server.d.ts",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "./node_modules/.bin/eslint . ./**/*.js",
+    "lint": "eslint . ./**/*.js",
     "test": "nyc mocha"
   },
   "repository": {

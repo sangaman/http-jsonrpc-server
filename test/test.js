@@ -29,6 +29,11 @@ function getContext() {
   return this;
 }
 
+let notifiedMessage;
+function notify(params) {
+  notifiedMessage = params.message;
+}
+
 const testPath = '/testpath';
 
 describe('constructor', () => {
@@ -138,6 +143,7 @@ describe('handling requests', () => {
       sum,
       wait,
       getContext,
+      notify,
     },
     context: 'test context',
   });
@@ -174,11 +180,25 @@ describe('handling requests', () => {
     assertError(response.body, RpcServer.INVALID_REQUEST, 1);
   }));
 
-  it('should error invalid id', () => testRequest({
+  it('should error invalid id array', () => testRequest({
     server: rpcServer.server,
     body: '{"jsonrpc":"2.0","id":["ids should not be arrays"],"method":"sum"}',
   }).then((response) => {
-    assertError(response.body, RpcServer.INVALID_REQUEST);
+    assertError(response.body, RpcServer.INVALID_REQUEST, null);
+  }));
+
+  it('should error invalid id object', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":{"msg":"ids should not be objects"},"method":"sum"}',
+  }).then((response) => {
+    assertError(response.body, RpcServer.INVALID_REQUEST, null);
+  }));
+
+  it('should error invalid id boolean', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":false,"method":"sum"}',
+  }).then((response) => {
+    assertError(response.body, RpcServer.INVALID_REQUEST, null);
   }));
 
   it('should error invalid method', () => testRequest({
@@ -209,6 +229,27 @@ describe('handling requests', () => {
     assertResult(response.body, 6, 4);
   }));
 
+  it('should return expected result for valid request with a string id', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":"test","method":"sum","params":[1,2,3]}',
+  }).then((response) => {
+    assertResult(response.body, 6, 'test');
+  }));
+
+  it('should return expected result for valid request with a zero id', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":0,"method":"sum","params":[1,2,3]}',
+  }).then((response) => {
+    assertResult(response.body, 6, 0);
+  }));
+
+  it('should return expected result for valid request with a null id', () => testRequest({
+    server: rpcServer.server,
+    body: '{"jsonrpc":"2.0","id":null,"method":"sum","params":[1,2,3]}',
+  }).then((response) => {
+    assertResult(response.body, 6, null);
+  }));
+
   it('should return expected result for valid request with charset in content type', () => testRequest({
     server: rpcServer.server,
     body: '{"jsonrpc":"2.0","id":14,"method":"sum","params":[10,20]}',
@@ -229,11 +270,13 @@ describe('handling requests', () => {
     .post('/')
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
-    .send('{"jsonrpc":"2.0","method":"sum","params":[1,2,3]}')
+    .send('{"jsonrpc":"2.0","method":"notify","params":{"message":"test notification"}}')
     .expect(204)
     .expect('Content-Length', '0')
     .then((response) => {
       assert.strictEqual(response.body, '');
+      // test to make sure the server handled the notification message
+      assert.strictEqual(notifiedMessage, 'test notification');
     }));
 
   it('should return batched results for valid requests', () => testRequest({
@@ -263,7 +306,7 @@ describe('handling requests', () => {
 
   it('should call an async method', () => testRequest({
     server: rpcServer.server,
-    body: '{"jsonrpc":"2.0","id":7,"method":"wait","params":{"ms":50}}',
+    body: '{"jsonrpc":"2.0","id":7,"method":"wait","params":{"ms":1}}',
   }).then((response) => {
     assertResult(response.body, true, 7);
   }));

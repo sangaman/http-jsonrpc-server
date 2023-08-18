@@ -5,7 +5,8 @@
   "main": "lib/http-jsonrpc-server.js",
   "types": "lib/http-jsonrpc-server.d.ts",
   "scripts": {
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage": "c8 npm test",
+    "coverage-ci": "c8 --reporter=lcov npm test",
     "lint": "eslint . ./**/*.js",
     "test": "node --test test/test.js"
   },
@@ -29,7 +30,7 @@
     "lib"
   ],
   "devDependencies": {
-    "coveralls": "^3.1.1",
+    "c8": "^8.0.1",
     "eslint": "^8.47.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "supertest": "^6.3.3"

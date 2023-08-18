@@ -1,10 +1,12 @@
 # http-jsonrpc-server
 
-[![Build Status](https://travis-ci.org/sangaman/http-jsonrpc-server.svg?branch=master)](https://travis-ci.org/sangaman/http-jsonrpc-server/)
-[![Coverage Status](https://coveralls.io/repos/github/sangaman/http-jsonrpc-server/badge.svg?branch=master)](https://coveralls.io/github/sangaman/http-jsonrpc-server?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5f1e5b18def4469eaf22e3bb29a2dfa0)](https://www.codacy.com/app/sangaman/http-jsonrpc-server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sangaman/http-jsonrpc-server&amp;utm_campaign=Badge_Grade)
-[![dependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server)
-[![devDependencies Status](https://david-dm.org/sangaman/http-jsonrpc-server/dev-status.svg)](https://david-dm.org/sangaman/http-jsonrpc-server?type=dev)
+![GitHub Actions Build](https://github.com/sangaman/http-jsonrpc-server/actions/workflows/master.yaml/badge.svg)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sangaman_http-jsonrpc-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sangaman_http-jsonrpc-server)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sangaman_http-jsonrpc-server&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sangaman_http-jsonrpc-server)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=sangaman_http-jsonrpc-server&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=sangaman_http-jsonrpc-server)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=sangaman_http-jsonrpc-server&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=sangaman_http-jsonrpc-server)[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sangaman_http-jsonrpc-server&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=sangaman_http-jsonrpc-server)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/http-jsonrpc-server)](https://socket.dev/npm/package/http-jsonrpc-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT%202.0-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 - [http-jsonrpc-server](#http-jsonrpc-server)
   - [Install](#install)

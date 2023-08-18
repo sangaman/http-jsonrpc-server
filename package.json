@@ -7,7 +7,7 @@
   "scripts": {
     "coverage": "c8 npm test",
     "coverage-ci": "c8 --reporter=lcov npm test",
-    "lint": "eslint . ./**/*.js",
+    "lint": "eslint lib/*.js",
     "test": "node --test test/test.js"
   },
   "repository": {

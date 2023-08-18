@@ -1,6 +1,4 @@
-/* eslint-env mocha */
-/* eslint no-await-in-loop: 0 */
-
+const { beforeEach, describe, it } = require('node:test');
 const assert = require('assert');
 const request = require('supertest');
 const RpcServer = require('../lib/http-jsonrpc-server');
@@ -380,7 +378,6 @@ describe('request callbacks', () => {
   }));
 });
 
-
 describe('setMethod', () => {
   const rpcServer = new RpcServer();
 
@@ -426,7 +423,9 @@ describe('listening and closing', () => {
     console.error = assert.fail;
 
     for (let n = 0; n < 11; n += 1) {
+      /* eslint-disable-next-line no-await-in-loop */
       await rpcServer.listen();
+      /* eslint-disable-next-line no-await-in-loop */
       await rpcServer.close();
     }
   });

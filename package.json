@@ -7,7 +7,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint . ./**/*.js",
-    "test": "nyc mocha"
+    "test": "node --test test/test.js"
   },
   "repository": {
     "type": "git",
@@ -36,15 +36,11 @@
   ],
   "devDependencies": {
     "coveralls": "^3.1.1",
-    "eslint": "^8.12.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "mocha": "^9.2.2",
-    "nyc": "^15.1.0",
-    "supertest": "^6.2.2"
+    "eslint": "^8.47.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "supertest": "^6.3.3"
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "dependencies": {}
+  }
 }

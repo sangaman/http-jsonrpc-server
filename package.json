@@ -16,12 +16,8 @@
   "keywords": [
     "jsonrpc",
     "json-rpc",
-    "http",
-    "server",
-    "http-jsonrpc-server",
-    "json",
-    "rpc",
-    "api"
+    "json rpc",
+    "rpc server"
   ],
   "author": "Daniel McNally",
   "license": "MIT",
@@ -30,9 +26,7 @@
   },
   "homepage": "https://github.com/sangaman/http-jsonrpc-server#readme",
   "files": [
-    "lib",
-    "README.md",
-    "LICENSE"
+    "lib"
   ],
   "devDependencies": {
     "coveralls": "^3.1.1",
